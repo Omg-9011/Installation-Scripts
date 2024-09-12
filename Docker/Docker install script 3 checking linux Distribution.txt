@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# Detect the Linux distribution
+if [ -f /etc/redhat-release ]; then
+    echo "RedHat/CentOS detected. Installing Docker..."
+    
+    # Uninstall old versions of Docker if they exist
+    sudo yum remove -y docker \
+                      docker-client \
+                      docker-client-latest \
+                      docker-common \
+                      docker-latest \
+                      docker-latest-logrotate \
+                      docker-logrotate \
+                      docker-engine
+
+    # Set up the Docker repository
+    sudo yum install -y yum-utils
+    sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+    # Install Docker Engine, Docker CLI, and containerd
+    sudo yum install docker -y
+
+    # Start and enable Docker
+    sudo systemctl start docker
+    sudo systemctl enable docker
+
+    # Verify Docker installation
+    sudo docker --version
+
+elif [ -f /etc/lsb-release ] || [ -f /etc/debian_version ]; then
+    echo "Ubuntu/Debian detected. Installing Docker..."
+    
+    # Uninstall old versions of Docker if they exist
+    sudo apt-get remove docker docker-engine docker.io containerd runc
+
+    # Update the package index and install packages to allow apt to use a repository over HTTPS
+    sudo apt-get update
+    sudo apt-get install -y \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        gnupg \
+        lsb-release
+
+    # Add Docker’s official GPG key
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+    # Set up the stable repository
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    # Update the package index again
+    sudo apt-get update
+
+    # Install Docker Engine, Docker CLI, and containerd
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+    # Enable Docker service to start on boot
+    sudo systemctl enable docker
+
+    # Start Docker service
+    sudo systemctl start docker
+
+    # Verify Docker installation
+    sudo docker --version
+else
+    echo "Unsupported Linux distribution."
+fi

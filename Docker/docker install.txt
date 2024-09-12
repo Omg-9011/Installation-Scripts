@@ -1,0 +1,34 @@
+docker install
+add user to docker group
+permissions to docker.sock file
+restart
+
+
+
+Steps :
+a) Installation :
+sudo yum update -y
+sudo yum install docker -y    **Any Other Way to Install ** example: docker.io, docker on wsl, docker desktop, etc. check installataion docs.
+sudo systemctl start docker
+sudo systemctl enable docker
+docker --version
+
+b) Add User to Docker Group:
+groups
+echo $USER
+sudo groupadd docker   **if required then "restart" the terminal to see the created group**
+sudo usermod -aG docker $USER		or 	sudo usermod -a -G docker $(whoami)
+ 
+3) Permissions (Optional):
+ls -l /var/run/docker.sock
+chmod a+x /var/run/docker.sock
+
+
+4) Restart Docker
+
+
+Link for docker installation:- https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04
+
+
+
+

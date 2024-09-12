@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Detect the Linux distribution
+if [ -f /etc/redhat-release ]; then
+    echo "RedHat/CentOS detected. Uninstalling Docker..."
+    
+    # Stop Docker service
+    sudo systemctl stop docker
+
+    # Uninstall Docker and related packages
+    sudo yum remove -y docker \
+                      docker-client \
+                      docker-client-latest \
+                      docker-common \
+                      docker-latest \
+                      docker-latest-logrotate \
+                      docker-logrotate \
+                      docker-engine
+
+    # Remove Docker data and images
+    sudo rm -rf /var/lib/docker
+    sudo rm -rf /var/lib/containerd
+
+elif [ -f /etc/lsb-release ] || [ -f /etc/debian_version ]; then
+    echo "Ubuntu/Debian detected. Uninstalling Docker..."
+
+    # Stop Docker service
+    sudo systemctl stop docker
+
+    # Uninstall Docker and related packages
+    sudo apt-get purge -y docker-ce docker-ce-cli containerd.io
+
+    # Remove Docker data and images
+    sudo rm -rf /var/lib/docker
+    sudo rm -rf /var/lib/containerd
+
+    # Clean up any remaining packages
+    sudo apt-get autoremove -y
+
+else
+    echo "Unsupported Linux distribution."
+fi

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Uninstall old versions of Docker if they exist
+sudo yum remove -y docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+
+# Set up the Docker repository
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+# Install Docker Engine, Docker CLI, and containerd
+#sudo yum install -y docker-ce docker-ce-cli containerd.io
+sudo yum install docker -y
+# Start and enable Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Verify Docker installation
+sudo docker --version
