@@ -1,0 +1,38 @@
+###give me install shell script for this below:###
+
+#For Debian/Ubuntu-based distros
+if "Debian/Ubuntu-based distros" then do
+"sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+sudo apt install ansible
+ansible --version"
+# For RedHat/CentOS/Fedora-based distro
+else if "RedHat/CentOS/Fedora-based distro" then do "sudo yum update
+sudo yum install epel-release
+sudo yum install ansible 
+ansible --version"
+
+
+###give me Uninstall shell script Only for this below:###
+
+if "Debian/Ubuntu-based distros" then do
+"sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+sudo apt install ansible
+ansible --version"
+# For RedHat/CentOS/Fedora-based distro
+else if "RedHat/CentOS/Fedora-based distro" then do "sudo yum update
+sudo yum install epel-release
+sudo yum install ansible 
+ansible --version"
+
+
+
+
+
+
+
+
+

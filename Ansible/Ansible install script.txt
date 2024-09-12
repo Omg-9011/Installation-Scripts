@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Detect if the OS is Debian/Ubuntu-based
+if command_exists apt; then
+    echo "Debian/Ubuntu-based distro detected."
+    sudo apt update
+    sudo apt install -y software-properties-common
+    sudo add-apt-repository --yes --update ppa:ansible/ansible
+    sudo apt install -y ansible
+    echo "Ansible version:"
+    ansible --version
+
+# Detect if the OS is RedHat/CentOS/Fedora-based
+elif command_exists yum; then
+    echo "RedHat/CentOS/Fedora-based distro detected."
+    sudo yum update -y
+    sudo yum install -y epel-release
+    sudo yum install -y ansible
+    echo "Ansible version:"
+    ansible --version
+
+else
+    echo "Unsupported OS. This script supports only Debian/Ubuntu or RedHat/CentOS/Fedora-based distros."
+    exit 1
+fi

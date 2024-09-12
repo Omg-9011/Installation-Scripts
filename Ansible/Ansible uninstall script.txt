@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Uninstall Ansible on Debian/Ubuntu-based distros
+if command_exists apt; then
+    echo "Debian/Ubuntu-based distro detected."
+    sudo apt update
+    sudo apt remove --purge -y ansible
+    sudo apt autoremove -y
+    sudo add-apt-repository -r ppa:ansible/ansible
+    echo "Ansible has been removed from your system."
+
+# Uninstall Ansible on RedHat/CentOS/Fedora-based distros
+elif command_exists yum; then
+    echo "RedHat/CentOS/Fedora-based distro detected."
+    sudo yum update -y
+    sudo yum remove -y ansible
+    echo "Ansible has been removed from your system."
+
+else
+    echo "Unsupported OS. This script supports only Debian/Ubuntu or RedHat/CentOS/Fedora-based distros."
+    exit 1
+fi
